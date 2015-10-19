@@ -129,6 +129,20 @@ public class Connect extends Thread {
                 Log.d(TAG, "handle: start response " + val);
             }
 
+            if(response.startsWith("+adc;")) {
+                Log.d(TAG, "handle: " + response);
+                int dataStart=response.indexOf(":");
+                String data = response.substring(dataStart+1);
+                String Val[]=data.split(",");
+                int Dval[]=new int[Val.length];
+                for (int i=0;i<Val.length;i++) {
+                    Dval[i]=Integer.valueOf(Val[i]);
+                }
+                msg = H.obtainMessage(1, Dval[0], 0);
+                H.sendMessage(msg);
+                Log.d(TAG, "handle: start response " + Dval[0]);
+            }
+
             //TODO ...
 
         }catch (Exception e) {

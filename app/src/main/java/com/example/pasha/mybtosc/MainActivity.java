@@ -1,5 +1,9 @@
 package com.example.pasha.mybtosc;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -42,8 +46,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -67,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                         switch (msg.what) {
                             case 1:
                                 Integer Volt=msg.arg1;
+                                Volt=(Volt*3300)/4095;
                                 String Val=Volt.toString();
                                 voltage.setText(Val);
                                 break;
@@ -93,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -122,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mycon.sendData("at+start=1");
+                    mycon.sendData("at+start=10");
                 }
             });
         }
