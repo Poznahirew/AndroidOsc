@@ -2,4 +2,6 @@
     <string name="app_name">MyBtOsc</string>
     <string name="action_settings">Settings</string>
     <string name="Time">Time</string>
+    <string name="exitstring">Exit</string>
+    <string name="goitem">Go</string>
 </resources>

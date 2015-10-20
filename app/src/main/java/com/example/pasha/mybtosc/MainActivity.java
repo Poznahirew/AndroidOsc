@@ -11,9 +11,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -26,6 +28,18 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
+
+
+import java.util.Random;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 
 import com.example.pasha.mybtosc.Connect;
 
@@ -42,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
     private MyTimerTask mMyTimerTask;
 
     Handler aHandler;
-
+    int all[];
+    SurfaceView Sview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,48 +68,46 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        aHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 1:
+                        Integer Volt=msg.arg1;
+                        Volt=(Volt*3300)/4095;
+                        String Val=Volt.toString();
+                        voltage.setText(Val);
+                        break;
+                    case 2:
+                        show_me();
+                        voltage.setText("Graph");
+                        break;
+                    default:
+                        voltage.setText("1024");
+                        break;
+                }
+            }
+        };
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (mycon != null) {
-                    mycon.disconnect();
-                    mycon = null;
-                }
-
-                voltage = (TextView) findViewById(R.id.VoltView);
-
-
-                aHandler = new Handler() {
-                    @Override
-                    public void handleMessage(Message msg) {
-                        switch (msg.what) {
-                            case 1:
-                                Integer Volt=msg.arg1;
-                                Volt=(Volt*3300)/4095;
-                                String Val=Volt.toString();
-                                voltage.setText(Val);
-                                break;
-                            case 2:
-                                voltage.setText("2048");
-                                break;
-                            default:
-                                voltage.setText("1024");
-                                break;
-                        }
-                    }
-                };
-
-                mycon = new Connect(aHandler);
-                mycon.start();
-
-                //aHandler.sendEmptyMessage((int)1);
-                if (mTimer != null) {mTimer.cancel();}
-                mTimer = new Timer();
-                mMyTimerTask = new MyTimerTask();
-                mTimer.schedule(mMyTimerTask, 1000, 1000);
+//                if (mycon != null) {
+//                    mycon.disconnect();
+//                    mycon = null;
+//                }
+//
+//                voltage = (TextView) findViewById(R.id.VoltView);
+//
+//                mycon = new Connect(aHandler);
+//                mycon.start();
+//
+//                if (mTimer != null) {mTimer.cancel();}
+//                mTimer = new Timer();
+//                mMyTimerTask = new MyTimerTask();
+//                mTimer.schedule(mMyTimerTask, 1000, 250);
 
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
@@ -109,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    OscGraph Osc;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -121,22 +136,53 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.exititem) {
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(1);
+            return true;
+        }
+
+        if (id == R.id.goitem) {
+
+            if (mycon != null) {
+                mycon.disconnect();
+                mycon = null;
+            }
+
+            voltage = (TextView) findViewById(R.id.VoltView);
+
+            mycon = new Connect(aHandler);
+            mycon.start();
+
+            if (mTimer != null) {mTimer.cancel();}
+            mTimer = new Timer();
+            mMyTimerTask = new MyTimerTask();
+            mTimer.schedule(mMyTimerTask, 1000, 250);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
+    public void show_me(){
+        int a[]=mycon.getData();
+        Osc=new OscGraph(this);
+        Osc.Set_data(a);
+        addContentView(Osc, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    }
+
     class MyTimerTask extends TimerTask {
+        CheckBox adc=(CheckBox) findViewById(R.id.checkBox);
         @Override
         public void run() {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mycon.sendData("at+start=10");
+                    if (adc.isChecked())
+                    mycon.sendData("at+start=20");
+                    else
+                        mycon.sendData("at+start=1");
                 }
             });
         }
     }
-
-
-
-
 }

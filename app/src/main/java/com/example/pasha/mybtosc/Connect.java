@@ -17,7 +17,7 @@ public class Connect extends Thread {
     private final static int READ_BUFFER_SIZE = 64 * 1024;
     private Socket mSocket;
     Handler H;
-
+    int val[];
     public void disconnect() {
         synchronized (this) {
             if(mSocket != null) {
@@ -57,9 +57,9 @@ public class Connect extends Thread {
                 if(readSize < 0)
                     break;
 
-                Log.d(TAG, "parse " + readBufferSize + " bytes");
-                readBufferSize += readSize;
 
+                readBufferSize += readSize;
+                Log.d(TAG, "parse " + readBufferSize + " bytes");
                 int count = parseData(readBuffer, readBufferSize);
                 if(count < readBufferSize) {
                     System.arraycopy(readBuffer, count, readBuffer, 0, readBufferSize - count);
@@ -71,6 +71,9 @@ public class Connect extends Thread {
         } // вывод исключений
     }
 
+    public int[] getData() {
+        return val;
+    }
 
     public int sendData(String data) {
         synchronized (this) {
@@ -136,9 +139,11 @@ public class Connect extends Thread {
                 String Val[]=data.split(",");
                 int Dval[]=new int[Val.length];
                 for (int i=0;i<Val.length;i++) {
-                    Dval[i]=Integer.valueOf(Val[i]);
+                    Dval[i]=Integer.valueOf(Val[i])/10;
                 }
-                msg = H.obtainMessage(1, Dval[0], 0);
+                val =new int[Dval.length];
+                val=Dval;
+                msg = H.obtainMessage(2, Dval[0], 0);
                 H.sendMessage(msg);
                 Log.d(TAG, "handle: start response " + Dval[0]);
             }
