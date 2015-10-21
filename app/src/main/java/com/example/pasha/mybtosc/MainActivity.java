@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         int a[]=mycon.getData();
         Osc=new OscGraph(this);
         Osc.Set_data(a);
-        addContentView(Osc, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        addContentView(Osc, new LayoutParams (400, 400));
     }
 
     class MyTimerTask extends TimerTask {
