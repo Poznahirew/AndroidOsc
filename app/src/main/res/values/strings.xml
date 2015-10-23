@@ -4,4 +4,5 @@
     <string name="Time">Time</string>
     <string name="exitstring">Exit</string>
     <string name="goitem">Go</string>
+    <string name="title_activity_settings">Settings</string>
 </resources>

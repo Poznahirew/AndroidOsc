@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            setContentView(R.layout.activity_settings);
             return true;
         }
 
@@ -164,10 +165,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void show_me(){
-        int a[]=mycon.getData();
-        Osc=new OscGraph(this);
-        Osc.Set_data(a);
-        addContentView(Osc, new LayoutParams (400, 400));
+        OscGraph view = (OscGraph)findViewById(R.id.view);
+        view.Set_data(mycon.getData());
+
+//        int a[]=mycon.getData();
+//        Osc=new OscGraph(this);
+//        Osc.Set_data(a);
+//        addContentView(Osc, new LayoutParams(600, 600));
+//        addContentView(Osc, findViewById(R.id.layoutOsc).getLayoutParams());
     }
 
     class MyTimerTask extends TimerTask {

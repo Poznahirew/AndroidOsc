@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.util.AttributeSet;
 import android.view.View;
 
 import java.util.Date;
@@ -19,15 +20,27 @@ public class OscGraph extends View {
         super(context);
     }
 
+    public OscGraph(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public OscGraph(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+
     public void Set_data(int[] data) {
-        Bank=null;
-        Bank=new int[data.length];
         Bank=data;
+        invalidate();
     }
 
     @Override
     public void onDraw(Canvas c) {
         super.onDraw(c);
+
+        if(Bank == null)
+            return;
+
         c.drawColor(Color.WHITE);
         int MyWidth=c.getWidth();
         int MyHeight=c.getHeight();
