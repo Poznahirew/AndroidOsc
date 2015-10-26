@@ -27,7 +27,8 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/linearLayout">
+            android:id="@+id/linearLayout"
+            android:weightSum="1">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -49,13 +50,31 @@
                 android:text="Osciloscope"
                 android:id="@+id/checkBox"
                 android:checked="false" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/editTextArfcn"
+                android:layout_weight="0.45" />
+
         </LinearLayout>
+
+        <SeekBar
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekBarGain"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="20" />
 
         <com.example.pasha.mybtosc.OscGraph
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/view"
             android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -44,21 +44,22 @@ public class OscGraph extends View {
         c.drawColor(Color.WHITE);
         int MyWidth=c.getWidth();
         int MyHeight=c.getHeight();
-        int BasikLine=MyHeight-100;
+        int Kmult=401/MyHeight;
+        int BasikLine=MyHeight-40;
         int step=MyWidth/(Bank.length-1);
         Paint paint=new Paint();
         paint.setColor(Color.BLUE);
 
         c.drawLine(0, BasikLine, MyWidth, BasikLine, paint);
 
-       paint.setStrokeWidth(10);
+       paint.setStrokeWidth(5);
        for (int i=1; i<Bank.length;i++) {
 
            int  startX, startY, stopX, stopY;
            startX=(i-1)*step;
-           startY=BasikLine-Bank[(i-1)];
+           startY=BasikLine-(Bank[(i-1)]/Kmult);
            stopX=i*step;
-           stopY=BasikLine-Bank[i];
+           stopY=BasikLine-(Bank[i]/Kmult);
            c.drawLine(startX, startY, stopX, stopY,paint);//.lineTo((i) * step, (BasikLine - Bank[i]));
         }
 

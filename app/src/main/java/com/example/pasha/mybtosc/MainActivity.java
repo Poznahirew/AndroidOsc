@@ -16,7 +16,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.io.BufferedWriter;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     Handler aHandler;
     int all[];
     SurfaceView Sview;
+    EditText Chanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +92,38 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        SeekBar GainBar = (SeekBar) findViewById(R.id.seekBarGain);
+
+        Chanel= (EditText) findViewById(R.id.editTextArfcn);
+
+        GainBar.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+                    int progress = 0;
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar,int progresValue, boolean fromUser) {
+                        progress = progresValue;
+                        mycon.sendData("at+gain="+String.valueOf(progresValue));
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                        // Do something here,
+                        //if you want to do anything at the start of
+                        // touching the seekbar
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        // Display the value in textview
+                        //textView.setText(progress + "/" + seekBar.getMax());
+                    }
+                });
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                mycon.sendData("at+arfcn="+String.valueOf(Chanel.getText()));
 //                if (mycon != null) {
 //                    mycon.disconnect();
 //                    mycon = null;
@@ -109,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 //                mMyTimerTask = new MyTimerTask();
 //                mTimer.schedule(mMyTimerTask, 1000, 250);
 
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
     }
