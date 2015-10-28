@@ -82,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
                         voltage.setText(Val);
                         break;
                     case 2:
+                        //show_me();
+                        voltage.setText("Graph");
+                        break;
+                    case 3:
                         show_me();
                         voltage.setText("Graph");
                         break;
@@ -188,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
             if (mTimer != null) {mTimer.cancel();}
             mTimer = new Timer();
             mMyTimerTask = new MyTimerTask();
-            mTimer.schedule(mMyTimerTask, 1000, 250);
+            mTimer.schedule(mMyTimerTask, 1000, 1000);
         }
 
         return super.onOptionsItemSelected(item);
@@ -196,13 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void show_me(){
         OscGraph view = (OscGraph)findViewById(R.id.view);
-        view.Set_data(mycon.getData());
-
-//        int a[]=mycon.getData();
-//        Osc=new OscGraph(this);
-//        Osc.Set_data(a);
-//        addContentView(Osc, new LayoutParams(600, 600));
-//        addContentView(Osc, findViewById(R.id.layoutOsc).getLayoutParams());
+        view.Set_data(mycon.getDataI(), mycon.getDataQ());
     }
 
     class MyTimerTask extends TimerTask {

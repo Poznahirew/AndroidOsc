@@ -18,6 +18,7 @@ public class Connect extends Thread {
     private Socket mSocket;
     Handler H;
     int val[];
+    int dal[];
     public void disconnect() {
         synchronized (this) {
             if(mSocket != null) {
@@ -71,8 +72,11 @@ public class Connect extends Thread {
         } // вывод исключений
     }
 
-    public int[] getData() {
+    public int[] getDataI() {
         return val;
+    }
+    public int[] getDataQ() {
+        return dal;
     }
 
     public int sendData(String data) {
@@ -148,6 +152,21 @@ public class Connect extends Thread {
                 Log.d(TAG, "handle: start response " + Dval[0]);
             }
 
+            if(response.startsWith("+bdc;")) {
+                Log.d(TAG, "handle: " + response);
+                int dataStart=response.indexOf(":");
+                String data = response.substring(dataStart+1);
+                String Val[]=data.split(",");
+                int Dval[]=new int[Val.length];
+                for (int i=0;i<Val.length;i++) {
+                    Dval[i]=Integer.valueOf(Val[i])/10;
+                }
+                dal =new int[Dval.length];
+                dal=Dval;
+                msg = H.obtainMessage(3, Dval[0], 0);
+                H.sendMessage(msg);
+                Log.d(TAG, "handle: start response " + Dval[0]);
+            }
             //TODO ...
 
         }catch (Exception e) {
